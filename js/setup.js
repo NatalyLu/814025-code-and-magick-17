@@ -1,44 +1,49 @@
 'use strict';
-var elementForRemoveClass = document.querySelector('.setup');
-elementForRemoveClass.classList.remove('hidden');
+var configurationOfUser = document.querySelector('.setup');
+configurationOfUser.classList.remove('hidden');
+var fragment = document.createDocumentFragment();
 
 var nameOfPendal = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var secondNameOfPendalf = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var colorsofRobe = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var colorsOfYyes = ['black', 'red', 'blue', 'yellow', 'green'];
 
-var name = [];
-var coatColor = [];
-var eyesColor = [];
+var quantityOfMags = 4;
+var Mags = [];
 
-
-var randomValue = function (arrayOfValues) {
-  var randomNomber = Math.random() * arrayOfValues.length;
-  return randomNomber;
+// Получаем рандомное число от 0 до длины массива
+var getRandomValue = function (arrayOfValues) {
+  return Math.round(Math.random() * arrayOfValues.length - 1);
 };
-
-// Заполняем массивы данными
-for (var i = 1; i < 4; i++) {
-  var firstName = randomValue(nameOfPendal);
-  var lastName = randomValue(secondNameOfPendalf);
-  // name.push(lastName);
-  name [i] = firstName + ' ' + lastName;
-  coatColor [i] = colorsofRobe[randomValue(colorsofRobe)];
-  eyesColor [i] = colorsOfYyes[randomValue(colorsOfYyes)];
-}
 
 // Куда будем вставлять элементы
 var listElement = document.querySelector('.setup-similar-list');
+
 // Шаблон
 var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
-for (var i = 0; i < 4; i++) {
-  var wizardElement = wizardTemplate.cloneNode(true);
+// Создаем армию
+var createMagS = function (quantity) {
+  for (var i = 0; i < quantity; i++) {
+    Mags.push({
+      fullName: nameOfPendal[getRandomValue(nameOfPendal)] + ' ' + secondNameOfPendalf[getRandomValue(secondNameOfPendalf)],
+      coatColor: colorsofRobe[getRandomValue(colorsofRobe)],
+      eyesColor: colorsOfYyes[getRandomValue(colorsOfYyes)]
+    });
 
+    var wizardElement = wizardTemplate.cloneNode(true);
 
-  wizardElement.querySelector('.setup-similar-label').textContent = name[i];
-  listElement.appendChild(wizardElement);
-}
+    wizardElement.querySelector('.setup-similar-label').textContent = Mags[i].fullName;
+    wizardElement.querySelector('.wizard-coat').style.fill = Mags[i].coatColor;
+    wizardElement.querySelector('.wizard-eyes').style.fill = Mags[i].eyesColor;
+
+    fragment.appendChild(wizardElement);
+  }
+};
+
+createMagS(quantityOfMags);
+listElement.appendChild(fragment);
+configurationOfUser.querySelector('.setup-similar').classList.remove('hidden');
 
 
 // <template id="similar-wizard-template" style="display: none">
